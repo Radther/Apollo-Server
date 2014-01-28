@@ -1,0 +1,12 @@
+<html>
+<head>a
+	<title>Apollo Server</title>
+</head>
+<body>
+	<h1>Apollo Server</h1>
+	<p style="font-family: 'HelveticaNeue', 'Helvetica Neue', 'Aerial';">
+	The best server in the world</p>
+
+</body>
+
+</html>

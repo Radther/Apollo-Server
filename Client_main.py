@@ -1,6 +1,6 @@
 import urllib
 import os
-import ftplib
+from ftplib import FTP
 import socket
 
 # urllib.urlretrieve("http://10.0.74.92:8000/Files.txt", "listoffiles.txt")
@@ -9,21 +9,21 @@ import socket
 # connecting.connect((,8000))
 
 
-directory = []
+from HTMLParser import HTMLParser
 
-try:
-    directory = ftp.nlst()
-except ftplib.error_perm, resp:
-    if str(resp) == "550 No directory found":
-        print "No directory in this directory"
-    else:
-        raise
-
-for f in directory:
-    print f
-
-
-
+class getFiles(HTMLParser):
+    def handle_starttag(self, tag, attrs):
+        if tag =='a':
+            for key, value in attrs:
+                if key == 'href':
+                    filelist.append(value)
+directory = 'http://10.0.87.20:8000/'
+files = urllib.urlopen(directory).read()
+parser = getFiles()
+filelist = []
+parser.feed(files)
+for files in filelist:
+	print files
 # directory = os.listdir("http://10.0.74.92:8000/")
 
 
@@ -31,7 +31,7 @@ file1 = raw_input("What file do you want?")
 name = raw_input("What do you want it to be called?")
 
 try:
-	urllib.urlretrieve("http://10.0.74.92:8000/%s" %file1, name)
+	urllib.urlretrieve("http://10.0.87.20:8000/%s" %file1, name)
 	os.system("open "+name)
 except urllib.HTTPError:
 	print "Try again"
