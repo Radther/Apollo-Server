@@ -6,8 +6,8 @@ import os
 #HTMLParser is used to the list of files by parsing through the url and getting the files
 from HTMLParser import HTMLParser
 
-#This is a counter for adding the number to the files so it's easy to open
-counter = 1
+#This is a listNo for adding the number to the files so it's easy to open
+listNo = 1
 
 #This used to get all the list of files 
 class getFiles(HTMLParser):
@@ -17,7 +17,7 @@ class getFiles(HTMLParser):
                 if key == 'href':
                     filelist.append(value)
 #This is the URL that you connect to 
-directory = 'http://10.0.74.25:8000/'
+directory = 'http://0.0.0.0:8000/'
 
 #This opens the URL and saves it to the var files
 files = urllib.urlopen(directory).read()
@@ -31,23 +31,35 @@ parser.feed(files)
 #This prints the list of files with the numbers added to them
 for files in filelist:
 	#Prints the file
-	print str(counter) + ". "+files
-	#Adds one to the counter
-	counter+=1
+	print str(listNo) + ". "+files
+	#Adds one to the listNo
+	listNo+=1
 
 #This gets the user to type in the number of the file that they want
 while True:
 	try:
 		#Get the number
-		fileWant = raw_input("What file do you want? Type in the number")
+		numberFile = raw_input("What file do you want? Type in the number")
 		#Find that number in the list
-		numberFile = filelist[int(fileWant)-1]
+		fileWant = filelist[int(numberFile)-1]
+		#Break the repeat
 		break
+	#Except if someone enters a none number
 	except ValueError:
 		print "Type in a number dumbass"
+	#Except if a the number is outside the range	
+	except IndexError:
+		print "Choose one of the available options for god sake"
 
 #Find what the user wants it to be called
-saveName = raw_input("What do you want it to be called?")
+saveName = raw_input("What do you want it to be called? You don't need to include the extention, that will be done for you") + fileWant[-4:]
+#Finds any spaces in the file name and replaces them with underscores
+if " " in saveName:
+	#Tells the user that the spaces will be replaces with the underscores
+	print "spaces with be replaced with underscores"
+	#Replaces the spaces with underscores and saves it again
+	saveName = saveName.replace(" ","_")
+
 
 #Grabs the file from the server
 def grabFiles(fileWant, saveName):
@@ -55,12 +67,21 @@ def grabFiles(fileWant, saveName):
 	urllib.urlretrieve(directory+"%s" %fileWant, saveName)
 	#Open the file first is for make else windows
 	if os.name == "posix":
+		#Open on Mac
 		os.system("open "+saveName)
 	else:
+		#Else open on windows
 		os.system("start "+saveName)
 
 #Call the function that grabs the file
-grabFiles(numberFile,saveName)
+grabFiles(fileWant,saveName)
+
+
+
+
+
+
+
 
 
 
